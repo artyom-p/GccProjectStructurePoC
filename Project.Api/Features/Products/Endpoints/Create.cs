@@ -38,7 +38,7 @@ public class Endpoint : IEndpoint
             .AllowAnonymous();
     }
 
-    private static async Task<Results<CreatedAtRoute<ProductResponse>, ValidationProblem, BadRequest>> Handle(
+    private static async Task<Results<CreatedAtRoute<ProductResponse>, ValidationProblem>> Handle(
         [FromBody] Request request,
         [FromServices] IValidator<Request> validator,
         [FromServices] IMediator mediator,
@@ -53,14 +53,9 @@ public class Endpoint : IEndpoint
         var query = new Command(request.Name);
         var result = await mediator.Send(query, ct);
         
-        if (result.IsFailed)
+        if (result.HasError<ValidationError>())
         {
-            if (result.HasError<ValidationError>())
-            {
-                return result.ToValidationProblem();   
-            }
-
-            return TypedResults.BadRequest();
+            return result.ToValidationProblem();   
         }
         
         var payload = result.Value.ToResponse();

@@ -2,7 +2,7 @@ using Project.Core.Features.Products.Models;
 
 namespace Project.Core.Features.Products;
 
-public interface IProductsRepository
+public interface IProductsService
 {
     Task<Product?> GetById(Guid id, CancellationToken ct = default);
    

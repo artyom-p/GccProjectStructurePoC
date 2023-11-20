@@ -1,9 +1,9 @@
 using Project.Core.Features.Products;
 using Project.Core.Features.Products.Models;
 
-namespace ImplementationA.Repositories;
+namespace ImplementationA.Services;
 
-public class ProductsRepository : IProductsRepository
+public class ProductsService : IProductsService
 {
     public async Task<Product?> GetById(Guid id, CancellationToken ct = default)
     {

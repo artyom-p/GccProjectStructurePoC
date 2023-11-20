@@ -1,9 +1,9 @@
 using Project.Core.Features.Categories;
 using Project.Core.Features.Categories.Models;
 
-namespace ImplementationA.Repositories;
+namespace ImplementationA.Services;
 
-public class CategoriesRepository : ICategoriesRepository
+public class CategoriesService : ICategoriesService
 {
     public async Task<IEnumerable<Category>> GetAll(CancellationToken cancellationToken)
     {

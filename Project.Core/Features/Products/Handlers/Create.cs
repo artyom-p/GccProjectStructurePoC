@@ -9,16 +9,16 @@ public record Command(string Name) : IRequest<Result<Product>>;
 
 public class Handler : IRequestHandler<Command, Result<Product>>
 {
-    private readonly IProductsRepository _repository;
+    private readonly IProductsService _service;
 
-    public Handler(IProductsRepository repository)
+    public Handler(IProductsService service)
     {
-        _repository = repository;
+        _service = service;
     }
     
     public async ValueTask<Result<Product>> Handle(Command request, CancellationToken cancellationToken)
     {
-        var product = await _repository.FindByName(request.Name, cancellationToken);
+        var product = await _service.FindByName(request.Name, cancellationToken);
         if (product is not null)
         {
             return Result
@@ -30,7 +30,7 @@ public class Handler : IRequestHandler<Command, Result<Product>>
         {
             Name = request.Name
         };
-        product = await _repository.Create(product, cancellationToken);
+        product = await _service.Create(product, cancellationToken);
         
         return Result.Ok(product)
             .WithSuccess($"Product with name '{request.Name}' successfully created");

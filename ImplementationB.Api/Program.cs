@@ -15,8 +15,8 @@ builder.Services.AddMediator(c =>
     c.ServiceLifetime = ServiceLifetime.Scoped;
 });
 builder.Services.AddValidatorsFromAssembly(Assembly.Load("Project.Api"));
-builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
-builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
+builder.Services.AddScoped<IProductsService, ProductsService>();
+builder.Services.AddScoped<ICategoriesService, CategoriesService>();
 
 var app = builder.Build();
 

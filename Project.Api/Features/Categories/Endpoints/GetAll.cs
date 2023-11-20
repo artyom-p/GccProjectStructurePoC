@@ -21,16 +21,12 @@ public class Endpoint : IEndpoint
             .AllowAnonymous();
     }
     
-    private static async Task<Results<Ok<List<CategoryResponse>>, BadRequest>> Handle(
+    private static async Task<Ok<List<CategoryResponse>>> Handle(
         [FromServices] IMediator mediator,
         CancellationToken ct)
     {
         var query = new Query();
         var result = await mediator.Send(query, ct);
-        if (result.IsFailed)
-        {
-            return TypedResults.BadRequest();
-        }
         
         var payload = result.Value
             .Select(c => c.ToResponse())

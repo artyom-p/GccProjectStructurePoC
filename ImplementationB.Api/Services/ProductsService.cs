@@ -3,7 +3,7 @@ using Project.Core.Features.Products.Models;
 
 namespace ImplementationB.Api.Repositories;
 
-public class ProductsRepository : IProductsRepository
+public class ProductsService : IProductsService
 {
     public async Task<Product?> GetById(Guid id, CancellationToken ct = default)
     {

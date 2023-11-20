@@ -8,9 +8,7 @@
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <RootNamespace>ImplementationA.Api</RootNamespace>
     </PropertyGroup>
-
-    <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
-    <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
+    
     <ItemGroup>
         <PackageReference Include="Mediator.Abstractions" Version="2.1.7" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.14" />
@@ -26,5 +24,16 @@
     <ItemGroup>
       <ProjectReference Include="..\Project.Api\Project.Api.csproj" />
     </ItemGroup>
-
+    
+    <ItemGroup>
+        <FilesToMove Include="$(OutDir)swagger.json"/>
+    </ItemGroup>
+    
+    <Target Name="CopySwaggerJsonToWwwRoot" AfterTargets="AfterBuild">
+        <Message Text="Moving Files @(FilesToMove)"/>
+        <Move SourceFiles="@(FilesToMove)" DestinationFolder="$(ProjectDir)/wwwroot/swagger/v1">
+            <Output TaskParameter="DestinationFiles" ItemName="FilesWritten"/>
+        </Move>
+        <Message Text="@(FilesWritten)"/>
+    </Target>
 </Project>

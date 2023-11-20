@@ -1,6 +1,7 @@
 using System.Reflection;
+using System.Runtime.InteropServices.ComTypes;
 using FluentValidation;
-using ImplementationA.Repositories;
+using ImplementationA.Services;
 using Project.Core.Features.Products;
 using Project.Core.Features.Categories;
 using Project.Api.Extensions;
@@ -15,10 +16,12 @@ builder.Services.AddMediator(c =>
     c.ServiceLifetime = ServiceLifetime.Scoped;
 });
 builder.Services.AddValidatorsFromAssembly(Assembly.Load("Project.Api"));
-builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
-builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
+builder.Services.AddScoped<IProductsService, ProductsService>();
+builder.Services.AddScoped<ICategoriesService, CategoriesService>();
 
 var app = builder.Build();
+
+app.UseHttpsRedirection();
 
 if (app.Environment.IsDevelopment())
 {
@@ -26,8 +29,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
+app.UseStaticFiles();
 app.MapGccEndpoints();
 
 app.Run();

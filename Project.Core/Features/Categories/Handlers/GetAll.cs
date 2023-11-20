@@ -8,16 +8,16 @@ public record Query : IRequest<Result<IEnumerable<Category>>>;
 
 public class Handler : IRequestHandler<Query, Result<IEnumerable<Category>>>
 {
-    private readonly ICategoriesRepository _repository;
+    private readonly ICategoriesService _service;
 
-    public Handler(ICategoriesRepository repository)
+    public Handler(ICategoriesService service)
     {
-        _repository = repository;
+        _service = service;
     }
     
     public async ValueTask<Result<IEnumerable<Category>>> Handle(Query request, CancellationToken cancellationToken)
     {
-        var categories = await _repository.GetAll(cancellationToken);
+        var categories = await _service.GetAll(cancellationToken);
         return Result.Ok(categories);
     }
 }

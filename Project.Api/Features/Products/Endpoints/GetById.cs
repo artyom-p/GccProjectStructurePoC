@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Project.Api.Common;
 using Project.Api.Features.Products.Mappers;
 using Project.Api.Features.Products.Models;
+using Project.Core.Errors;
 using Project.Core.Features.Products.Handlers.GetById;
 
 namespace Project.Api.Features.Products.Endpoints.GetById;
@@ -23,7 +24,7 @@ public class Endpoint : IEndpoint
             .AllowAnonymous();
     }
 
-    private static async Task<Results<Ok<ProductResponse>, NotFound, BadRequest>> Handle(
+    private static async Task<Results<Ok<ProductResponse>, NotFound>> Handle(
         [AsParameters] Request request,
         [FromServices] IMediator mediator,
         CancellationToken ct)
@@ -31,12 +32,7 @@ public class Endpoint : IEndpoint
         var query = new Query(request.Id);
         var result = await mediator.Send(query, ct);
 
-        if (result.IsFailed)
-        {
-            return TypedResults.BadRequest();
-        }
-
-        if (result.Value is null)
+        if (result.HasError<NotFoundError>())
         {
             return TypedResults.NotFound();
         }
