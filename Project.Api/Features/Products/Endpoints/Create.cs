@@ -9,23 +9,9 @@ using Project.Api.Features.Products.Models;
 using Project.Core.Errors;
 using Project.Core.Features.Products.Handlers.Create;
 
-namespace Project.Api.Features.Products.Endpoints.Create;
+namespace Project.Api.Features.Products.Endpoints;
 
-public record Request
-{
-    public required string Name { get; init; }
-}
-
-public class Validator : AbstractValidator<Request>
-{
-    public Validator()
-    {
-        RuleFor(x => x.Name)
-            .NotEmpty();
-    }
-}
-
-public class Endpoint : IEndpoint
+public class CreateEndpoint : IEndpoint
 {
     public const string Name = "Products.Create";
 
@@ -59,6 +45,21 @@ public class Endpoint : IEndpoint
         }
         
         var payload = result.Value.ToResponse();
-        return TypedResults.CreatedAtRoute(payload, GetById.Endpoint.Name, new { id = payload.Id });
+        return TypedResults
+            .CreatedAtRoute(payload, GetByIdEndpoint.Name, new { id = payload.Id });
+    }
+    
+    public record Request
+    {
+        public required string Name { get; init; }
+    }
+
+    public class Validator : AbstractValidator<Request>
+    {
+        public Validator()
+        {
+            RuleFor(x => x.Name)
+                .NotEmpty();
+        }
     }
 }

@@ -1,5 +1,6 @@
 using Project.Api.Common;
 using Project.Api.Extensions;
+using Project.Api.Features.Products.Endpoints;
 
 namespace Project.Api.Features.Products;
 
@@ -12,7 +13,7 @@ public class ProductsEndpointGroup : IEndpointGroup
     public static void ConfigureEndpoints(RouteGroupBuilder builder)
     {
         builder
-            .MapMinimalEndpoint<Endpoints.GetById.Endpoint>()
-            .MapMinimalEndpoint<Endpoints.Create.Endpoint>();
+            .MapMinimalEndpoint<GetByIdEndpoint>()
+            .MapMinimalEndpoint<CreateEndpoint>();
     }
 }

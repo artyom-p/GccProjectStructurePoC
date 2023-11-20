@@ -1,5 +1,6 @@
 using Project.Api.Common;
 using Project.Api.Extensions;
+using Project.Api.Features.Categories.Endpoints;
 
 namespace Project.Api.Features.Categories;
 
@@ -12,6 +13,6 @@ public class CategoriesEndpointGroup : IEndpointGroup
     public static void ConfigureEndpoints(RouteGroupBuilder builder)
     {
         builder
-            .MapMinimalEndpoint<Endpoints.GetAll.Endpoint>();
+            .MapMinimalEndpoint<GetAllEndpoint>();
     }
 }

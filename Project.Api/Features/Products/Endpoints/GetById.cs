@@ -7,11 +7,9 @@ using Project.Api.Features.Products.Models;
 using Project.Core.Errors;
 using Project.Core.Features.Products.Handlers.GetById;
 
-namespace Project.Api.Features.Products.Endpoints.GetById;
+namespace Project.Api.Features.Products.Endpoints;
 
-public record Request(Guid Id);
-
-public class Endpoint : IEndpoint
+public class GetByIdEndpoint : IEndpoint
 {
     public const string Name = "Products.GetById";
 
@@ -40,4 +38,6 @@ public class Endpoint : IEndpoint
         var payload = result.Value.ToResponse();
         return TypedResults.Ok(payload);
     }
+    
+    public record Request(Guid Id);
 }

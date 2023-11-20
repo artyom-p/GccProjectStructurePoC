@@ -6,9 +6,9 @@ using Project.Api.Features.Categories.Mappers;
 using Project.Api.Features.Categories.Models;
 using Project.Core.Features.Categories.Handlers.GetAll;
 
-namespace Project.Api.Features.Categories.Endpoints.GetAll;
+namespace Project.Api.Features.Categories.Endpoints;
 
-public class Endpoint : IEndpoint
+public class GetAllEndpoint : IEndpoint
 {
     public const string Name = "Categories.GetAll";
 
