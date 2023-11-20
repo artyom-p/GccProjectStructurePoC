@@ -1,7 +1,3 @@
-using System.Reflection;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using Microsoft.OpenApi.Models;
 using Project.Api.Common;
 using Project.Api.Features.Categories;
 using Project.Api.Features.Products;
@@ -10,24 +6,27 @@ namespace Project.Api.Extensions;
 
 public static class WebApplicationExtensions
 {
-    public static WebApplication MapGccEndpoints(this WebApplication app)
+    public static WebApplication UseProblemDetailsExceptionHandler(this WebApplication app)
     {
-        var assemblyPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-        app.MapGet("/swagger/v1/swagger.json", () =>
+        app.UseExceptionHandler(builder =>
         {
-            var json = File.ReadAllText($"{assemblyPath}/swagger.json");
-            var doc = JsonSerializer.Deserialize<OpenApiDocument>(json, new JsonSerializerOptions
+            builder.Run(async httpContext =>
             {
-                PropertyNameCaseInsensitive = true,
-                AllowTrailingCommas = true,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                var problemDetailsService = httpContext.RequestServices.GetService<IProblemDetailsService>();
+                
+                if (problemDetailsService == null || 
+                    !await problemDetailsService.TryWriteAsync(new ProblemDetailsContext { HttpContext = httpContext }))
+                {
+                    await httpContext.Response.WriteAsync("An error occurred while processing your request.");
+                }
             });
-            doc.Info.Title = "GCC API";
-            doc.Info.Version = "1.2.3";
-            return Results.Json(doc);
         });
         
+        return app;
+    }
+    
+    public static WebApplication MapGccEndpoints(this WebApplication app)
+    {
         app.MapEndpointGroup<ProductsEndpointGroup>();
         app.MapEndpointGroup<CategoriesEndpointGroup>();
         

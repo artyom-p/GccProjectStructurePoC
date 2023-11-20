@@ -3,7 +3,7 @@ using Project.Api.Extensions;
 
 // This project is used as an API definition, swagger is generated from it
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateSlimBuilder(args);
 
 builder.Host.UseDefaultServiceProvider(c =>
 {
